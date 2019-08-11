@@ -64,6 +64,19 @@ class User_model extends CI_Model
             }
         }
 	}
+
+	/**
+	 * Get ID of last registered User
+	 */
+	public function get_ID_last_reg($table, $column){
+		$this->db->select($column);
+		$this->db->from($table);
+		$this->db->limit(1);
+		$this->db->order_by($column,"DESC");
+		$query = $this->db->get();
+		$result = $query->result();
+
+	}
 	
 	/**
 	 * Generic function for inserting data

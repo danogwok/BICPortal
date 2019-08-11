@@ -35,7 +35,8 @@
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
               </div>
-              <form class="user" action="<?php echo base_url(); ?>user/start_business_registration" method="post">
+              <!-- <form class="user" action="<?php echo base_url(); ?>user/start_business_registration" method="post"> -->
+							<form action="#" id="saveForm">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
 				  <label class="">Trade Name</label>
@@ -107,7 +108,8 @@
                   Please acknowledge the following 
                 </a>
 				<br/>
-                <div id="subbro"><button class="btn btn-google btn-user btn-block" type="submit" name="action">
+                <!-- <div id="subbro"><button class="btn btn-google btn-user btn-block" type="submit" name="action" > -->
+								<div id="subbro"><button class="btn btn-google btn-user btn-block" type="submit" onclick="saveTradeData();">
                   Register Account
                 </button></div>
               </form>
@@ -128,18 +130,17 @@
   
   <!-- Company Person Modal-->
 	 <!-- <form action="<?php echo base_url(); ?>user/getPersonDetails" method="post" id="frmContact"> -->
-	 
     <div class="modal fade" id="PersonModal" tabindex="-1" role="dialog" aria-labelledby="PersonModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-				<form action="#" id="form_user" class="form-horizontal">
+				
           <div class="modal-header">
             <h5 class="modal-title" name="exampleModalLabel">Add Contact Person</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true"></span>
             </button>
           </div>
-		     
+					<form action="#" id="frmContact" class="form-horizontal">
           <div class="modal-body">		 
             <div class='form-group row'>
                         <div class='col-md-6 col-lg-6 text-center'>
@@ -216,15 +217,16 @@
 	   
             
           </div>
-					</form>
+					
           <div class="modal-footer">
-            <button class="btn btn-primary" id ="save" onclick="save()">Add Person</button>
+            <!-- <button class="btn btn-primary" id ="submit" onclick="save();">Add Person</button> -->
+            <button class="btn btn-primary" id ="submit">Add Person</button>
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><!--End Session-->
           </div>
+					</form>
         </div>
       </div>
     </div>
-		
     <!-- End Add Company Person Modal-->
 	
 	<!-- Acknowledgement Modal-->
@@ -266,79 +268,50 @@
   <script src="<?php echo base_url(); ?>assets/js/sb-admin-2.min.js"></script>
 
   <script>
+
+	var data;
+
 	function store(){
-		data = {};
-		$('#frmContact').submit(function(e) {
-			// $('#frmContact').submit(function() {
-			e.preventDefault();
-			// Coding
-			//$('#PersonModal').modal('toggle'); 
-			//or  
-			//Collect data
-			data.select = $("#title").value();
-			$('#PersonModal').modal('hide');
-			//return false;
-		});
-		console.log(data);
+		var formData = new FormData($('#frmContact')[0])
+		//Display the key/value pairs
+		data = formData;
 	}
-	
-	function save()
-	{
-		$('#btnSave').text('saving...'); //change button text
-		$('#btnSave').attr('disabled',true); //set button disable
-		var url;
 
-		// if(save_method == 'add') {
-		// 	url = "<?php echo base_url('user/addStudent'); ?>";
-		// } else {
-		// 	url = "<?php echo base_url('user/updateStudent');?>";
-		// }
+	$('#frmContact').submit(function(e) {
+		e.preventDefault();
+		store();
+		$('#PersonModal').modal('toggle');
+	});
 
-		var formData = new FormData($('#form_user')[0]);
-
-		console.log(formData);
-
-		// Display the key/value pairs
-		for (var pair of formData.entries()) {
-			//ID -> Value
-			console.log(pair[0]+ ', ' + pair[1]); 
+	function saveTradeData(){
+		var formData = new FormData($('#saveForm')[0])
+		var final_data;
+		//Loop through save Data
+		for(var pair of data.entries()){
+			formData.append(pair[0], pair[1]);
 		}
-
-		// $.ajax({
-		// 	url : url,
-		// 	type: "POST",
-		// 	data: formData,
-		// 	contentType: false,
-		// 	processData: false,
-		// 	dataType: "JSON",
-		// 	success: function(data)
-		// 	{
-		// 		if(data.status) //if success close modal and reload ajax table
-		// 		{
-		// 			$('#modal_form').modal('hide');
-		// 			reload_table();
-		// 		}
-		// 		else
-		// 		{
-
-		// 			for (var i = 0; i < data.inputerror.length; i++)
-		// 			{
-		// 				$('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error'); //select parent twice to select div form-group class and add has-error class
-		// 				$('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-		// 			}
-		// 		}
-		// 		$('#btnSave').text('save'); //change button text
-		// 		$('#btnSave').attr('disabled',false); //set button enable
-
-		// 	},
-		// 	error: function (jqXHR, textStatus, errorThrown)
-		// 	{
-		// 		alert('Error adding / update data');
-		// 		$('#btnSave').text('save'); //change button text
-		// 		$('#btnSave').attr('disabled',false); //set button enable
-
-		// 	}
-		// });
+		//Loop throughall data from modal
+		// for(var pair of formData.entries()){
+		// 	console.log(pair[0]+ ', ' + pair[1]); 
+		// }
+		//Send stuff
+		$.ajax({
+         type: "POST",
+				 url: "<?php echo base_url(); ?>user/start_business_registration",
+				 data: formData,
+         contentType: false,
+				 dataType: "JSON",
+				 processData: false,
+         success: 
+              function(data){
+								console.log("success");
+              },
+					error: function(xhr, textStatus, errorThrown) {
+						console.log(xhr.responseText);
+						//console.log(textStatus);
+						console.log(errorThrown);
+  				}
+		});
 	}
 
   </script>

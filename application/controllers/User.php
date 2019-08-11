@@ -103,17 +103,50 @@ class User extends CI_Controller
      */
     public function start_business_registration()
     {
+        //Get User data from the tables
+        $Email = $this->input->get_post('email');
+        $Title = $this->input->get_post('title');
+        $FirstName = $this->input->get_post('firstname');
+        $Surname = $this->input->get_post('surname');
+
+        //Create User Array Object data
+        $user_data = array(
+             'Title' => $Title,
+             'FirstName' => $FirstName,
+             'Surname' => $Surname,
+             'Email' => $Email,
+             //'Password' => $Password,
+         );
+
+        //Person details from post
+        $Gender = $this->input->get_post('gender');
+        $Dietary_Requirements = $this->input->get_post('diet');
+        $Disability_Requirements = $this->input->get_post('disability');
+        $Closest_Transport = $this->input->get_post('transport');
+        $cellphone = $this->input->get_post('cellphone');
+        $position = $this->input->get_post('position');
+        //Data for contactperson
+        $contact_data = array(
+            'Cell' => $cellphone,
+            // "CompetitionExposure" =>	i DONT KNOW WHERE YOU GET FROM
+            'Position' => $position,
+            'Gender' => $Gender,
+            'Diet' => $Dietary_Requirements,
+            'Disability' => $Disability_Requirements,
+            'ClosestTransport' => $Closest_Transport,
+        );
+
         //Info
-        $password = $this->input->post('password');
+        $password = $this->input->get_post('password');
 
         //Business Info
-        $TradeName = $this->input->post('tradename');
-        $RegisteredName = $this->input->post('registeredname');
-        $RegistrationDate = $this->input->post('regdate');
-        $RegistrationNumber = $this->input->post('regnum');
-        $Sector = $this->input->post('sector');
-        $Province = $this->input->post('province');
-        $Town = $this->input->post('town');
+        $TradeName = $this->input->get_post('tradename');
+        $RegisteredName = $this->input->get_post('registeredname');
+        $RegistrationDate = $this->input->get_post('regdate');
+        $RegistrationNumber = $this->input->get_post('regnum');
+        $Sector = $this->input->get_post('sector');
+        $Province = $this->input->get_post('province');
+        $Town = $this->input->get_post('town');
 
         $business_data = array(
             'TradeName' => $TradeName,
@@ -125,30 +158,36 @@ class User extends CI_Controller
             'Town' => $Town,
         );
 
-        //Insert Business and get business ID
-        $b_id = $this->business_model->initial_business_register($business_data);
+        //Insert Business
+		$this->business_model->initial_business_register($business_data);
+		
+		//get business ID
+		$table = "business";
+		$column = "business";
+		$b_id = $this->user_model->get_ID_last_reg($table, $column);
 
         //Data for users
         $data = $this->getPersonDetails();
-        $user_data = $data[0];
-        $contact_person_data = $data[1];
+        // $user_data = $data[0];
+        // $contact_data = $data[1];
         $user_data['Password'] = $password;
 
-        var_dump($business_data);
-        var_dump($this->data);
-        var_dump($this->data[0]);
-        var_dump($this->data[1]);
-        exit();
+        //Insert User
+		$this->user_model->user_register($user_data);
+		
+		// Get User Id
+		$table = "user";
+		$column = "UserID";
+		$u_id = $this->user_model->get_ID_last_reg($table, $column);
 
-        //Insert User and Get User Id
-        $u_id = $this->user_model->user_register($user_data);
-
-        $contact_person_data['UserID'] = $u_id;	//Add user ID
-        $contact_person_data['BusinessID'] = $b_id;	//Add Business ID
+        $contact_data['UserID'] = $u_id;	//Add user ID
+        $contact_data['BusinessID'] = $b_id;	//Add Business ID
 
         //Insert Contact Person with both business and User Ids
         $table = 'contactperson';
-        $contact_id = $this->user_model->generic_register($contact_person_data, $table);
+		$contact_id = $this->user_model->generic_register($contact_person_data, $table);
+		
+		echo json_encode("Success");
     }
 
     /**
