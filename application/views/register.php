@@ -145,7 +145,7 @@
             <div class='form-group row'>
                         <div class='col-md-6 col-lg-6 text-center'>
                         <label class='col-form-label'><strong>Title</strong></label>
-                        <select class="form-control" name="" id="title">
+                        <select class="form-control" name="title" id="title">
 						 <option value="Ms">Ms</option>
 						 <option value="Mr">Mr</option>
 						 <option value="Dr">Dr</option>
@@ -302,14 +302,13 @@
          contentType: false,
 				 dataType: "JSON",
 				 processData: false,
-         success: 
-              function(data){
-								console.log("success");
-              },
-					error: function(xhr, textStatus, errorThrown) {
-						console.log(xhr.responseText);
-						//console.log(textStatus);
-						console.log(errorThrown);
+         success: function(response){
+						console.log(response.data);
+						window.location = "<?php echo base_url(); ?>user";
+					},
+					error: function(response) {
+						console.log(response.data);
+						window.location = "<?php echo base_url(); ?>user";
   				}
 		});
 	}
