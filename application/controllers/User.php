@@ -54,10 +54,19 @@ class User extends CI_Controller
                 $result = $this->user_model->user_login($email, $password);
                 if (!empty($result)) {
                     //Means, successful login
-                    //$sessionData = $this->session->userdata;
+                    $sessionData = array('userId' => $result->UserID,
+                                    'userTitle' => $result->Title,
+                                    'userFirstname' => $result->FirstName,
+                                    'userSurname' => $result->Surname,
+                                    'userEmail' => $result->Email,
+                                    'userPassword' => $result->Password,
+                                    'userActive' => $result->inActive,
+                                    'userDeleted' => $result->isDeleted,
+                                    'isLoggedIn' => true,
+                                );
                     //Handle the session data
-                    // $this->session->set_userdata($sessionData);
-                    redirect('dashboard');	//redirect to dashboard
+                    $this->session->set_userdata($sessionData);
+                    redirect('user/dashboard');	//redirect to dashboard
                 } else {
                     //Failed Login
                     //redirect("index");	//call index
@@ -174,11 +183,20 @@ class User extends CI_Controller
         $table = 'contactperson';
         $contact_id = $this->user_model->generic_register($contact_data, $table);
         //var_dump(array($contact_id));
-        //echo json_encode(array($contact_id));
+        echo json_encode(array($contact_id));
     }
 
+    /**
+     * Function that loads dashboard->index.
+     */
     public function dashboard()
     {
-        $this->load->view('dashboard');
+        $isLoggedIn = $this->session->userdata('isLoggedIn');
+        if (!isset($isLoggedIn) || $isLoggedIn != true) {
+            $this->load->view('index');
+        } else {
+            $sessionData = $this->session->userdata;
+            $this->load->view('dashboard', $sessionData);
+        }
     }
 }
