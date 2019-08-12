@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `bic_db`
 --
+CREATE DATABASE IF NOT EXISTS bic_db;
+USE bic_db;
 
 -- --------------------------------------------------------
 

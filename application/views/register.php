@@ -36,7 +36,7 @@
                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
               </div>
               <!-- <form class="user" action="<?php echo base_url(); ?>user/start_business_registration" method="post"> -->
-							<form action="#" id="saveForm">
+			<form action="#" id="saveForm">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
 				  <label class="">Trade Name</label>
@@ -60,7 +60,7 @@
 				<div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
 				  <label class="">Sector</label>
-                    <select class="form-control" name="" id="sector">
+                    <select class="form-control" name="sector" id="sector">
 					<option value="Agriculture">Agriculture</option>
 					<option value="Construction/Engineering">Construction/Engineering</option>
 					<option value="Manufacturing">Manufacturing</option>
@@ -295,6 +295,7 @@
 		// 	console.log(pair[0]+ ', ' + pair[1]); 
 		// }
 		//Send stuff
+		alert(formdata);
 		$.ajax({
          type: "POST",
 				 url: "<?php echo base_url(); ?>user/start_business_registration",
