@@ -104,7 +104,7 @@
                   </div>
                 </div><br/>
 				
-                <a data-toggle="modal" data-target="#AcknowledgementModal" href="Application.html" class="btn btn-info btn-user btn-block">
+                <a data-toggle="modal" data-target="#AcknowledgementModal"  class="btn btn-info btn-user btn-block">
                   Please acknowledge the following 
                 </a>
 				<br/>
@@ -290,12 +290,12 @@
 		for(var pair of data.entries()){
 			formData.append(pair[0], pair[1]);
 		}
+		
 		//Loop throughall data from modal
 		// for(var pair of formData.entries()){
 		// 	console.log(pair[0]+ ', ' + pair[1]); 
 		// }
 		//Send stuff
-		alert(formdata);
 		$.ajax({
          type: "POST",
 				 url: "<?php echo base_url(); ?>user/start_business_registration",

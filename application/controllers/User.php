@@ -36,7 +36,7 @@ class User extends CI_Controller
         if (!isset($isLoggedIn) || $isLoggedIn != true) {
             $this->load->view('index');
         } else {
-            redirect('/dashboard');
+            redirect('/user/dashboard');
         }
     }
 
@@ -184,6 +184,23 @@ class User extends CI_Controller
         $contact_id = $this->user_model->generic_register($contact_data, $table);
         //var_dump(array($contact_id));
         echo json_encode(array($contact_id));
+    }
+
+
+
+
+
+    /**
+     * Add Competition exposure to Contact PErson
+     */
+    public function post_competition_exposure()
+    {
+        //Get User data from the tables
+        $Exposure = $this->input->post('otherexposure') == null? $this->input->post('exposure'): $this->input->post('otherexposure');
+
+       
+       $this->user_model->update_competion_exposure($Exposure);
+     
     }
 
     /**

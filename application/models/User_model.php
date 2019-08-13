@@ -87,4 +87,14 @@ class User_model extends CI_Model
 		$insert_id = $this->db->insert_id();
         return  $insert_id;	//Return row id
     }
+
+    public function update_competion_exposure($exposure)
+    {
+        $data = [
+            'CompetitionExposure' => $exposure
+        ];
+       // $this->db->set('CompetitionExposure',$exposure, FALSE);
+        $this->db->where('UserID', $this->session->userId);
+        $this->db->update('contactperson',$data); // gives UPDATE mytable SET field = field+1 WHERE id = 2*/
+    }
 }
